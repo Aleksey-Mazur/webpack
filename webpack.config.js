@@ -1,6 +1,11 @@
 const path = require('path');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+
+const isDev = process.env.NODE_ENV === 'development';
 
 module.exports = {
   context: path.resolve(__dirname, 'src'),
@@ -26,12 +31,15 @@ module.exports = {
     splitChunks: {
       chunks: 'all',
     },
+    minimizer: [new CssMinimizerPlugin(), new TerserPlugin()],
   },
   devServer: {
     static: {
       directory: path.join(__dirname, 'src'),
     },
     port: 4200,
+    compress: true,
+    hot: isDev,
   },
   plugins: [
     new HTMLWebpackPlugin({
@@ -45,12 +53,15 @@ module.exports = {
         },
       ],
     }),
+    new MiniCssExtractPlugin({
+      filename: 'styles/[name].[contenthash].css',
+    }),
   ],
   module: {
     rules: [
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
       },
       {
         test: /\.(ico|png|svg|jpg|jpeg|gif)$/i,
