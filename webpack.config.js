@@ -1,6 +1,6 @@
 const path = require('path');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   context: path.resolve(__dirname, 'src'),
@@ -12,6 +12,8 @@ module.exports = {
   output: {
     filename: '[name].[contenthash].js',
     path: path.resolve(__dirname, 'dist'),
+    clean: true,
+    assetModuleFilename: 'assets/[name][ext]',
   },
   resolve: {
     extensions: ['.js', '.json', '.png'],
@@ -25,11 +27,24 @@ module.exports = {
       chunks: 'all',
     },
   },
+  devServer: {
+    static: {
+      directory: path.join(__dirname, 'src'),
+    },
+    port: 4200,
+  },
   plugins: [
     new HTMLWebpackPlugin({
       template: './index.html',
     }),
-    new CleanWebpackPlugin(),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, 'src/favicon.ico'),
+          to: path.resolve(__dirname, 'dist'),
+        },
+      ],
+    }),
   ],
   module: {
     rules: [
@@ -38,15 +53,18 @@ module.exports = {
         use: ['style-loader', 'css-loader'],
       },
       {
-        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        test: /\.(ico|png|svg|jpg|jpeg|gif)$/i,
         type: 'asset/resource',
         generator: {
-          filename: '[name][ext]',
+          filename: 'assets/images/[name][ext]',
         },
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
         type: 'asset/resource',
+        generator: {
+          filename: 'assets/fonts/[name][ext]',
+        },
       },
     ],
   },
