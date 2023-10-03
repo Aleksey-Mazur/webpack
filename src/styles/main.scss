@@ -1,0 +1,18 @@
+$backgroundColor: beige;
+$border: 1px solid #3d1818ce;
+
+body {
+  background-color: $backgroundColor;
+}
+
+.card {
+  border: $border;
+  border-radius: 5px;
+  margin-top: 1rem;
+  padding: 1rem;
+
+  h2 {
+    text-align: center;
+    color: darkslateblue;
+  }
+}

@@ -7,6 +7,9 @@ const TerserPlugin = require('terser-webpack-plugin');
 
 const isDev = process.env.NODE_ENV === 'development';
 
+const filename = ext =>
+  isDev ? `[name].${ext}` : `[name].[contenthash].${ext}`;
+
 module.exports = {
   context: path.resolve(__dirname, 'src'),
   mode: 'development',
@@ -15,7 +18,7 @@ module.exports = {
     analytics: './analytics.js',
   },
   output: {
-    filename: '[name].[contenthash].js',
+    filename: filename('js'),
     path: path.resolve(__dirname, 'dist'),
     clean: true,
     assetModuleFilename: 'assets/[name][ext]',
@@ -54,7 +57,7 @@ module.exports = {
       ],
     }),
     new MiniCssExtractPlugin({
-      filename: 'styles/[name].[contenthash].css',
+      filename: `styles/${filename('css')}`,
     }),
   ],
   module: {
@@ -62,6 +65,10 @@ module.exports = {
       {
         test: /\.css$/,
         use: [MiniCssExtractPlugin.loader, 'css-loader'],
+      },
+      {
+        test: /\.s[ac]ss$/,
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
       },
       {
         test: /\.(ico|png|svg|jpg|jpeg|gif)$/i,
