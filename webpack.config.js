@@ -15,7 +15,7 @@ module.exports = {
   mode: 'development',
   entry: {
     main: './index.js',
-    analytics: './analytics.js',
+    analytics: './analytics.ts',
   },
   output: {
     filename: filename('js'),
@@ -82,6 +82,26 @@ module.exports = {
         type: 'asset/resource',
         generator: {
           filename: 'assets/fonts/[name][ext]',
+        },
+      },
+      {
+        test: /\.m?js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env'],
+          },
+        },
+      },
+      {
+        test: /\.m?ts$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env', '@babel/preset-typescript'],
+          },
         },
       },
     ],

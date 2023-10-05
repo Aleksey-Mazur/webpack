@@ -1,10 +1,10 @@
 import * as $ from 'jquery';
 
-function createAnalytics() {
-  let counter = 0;
-  let destroyed = false;
+function createAnalytics(): object {
+  let counter: number = 0;
+  let destroyed: boolean = false;
 
-  const listener = () => counter++;
+  const listener = (): number => counter++;
 
   $(document).on('click', listener);
 
@@ -14,7 +14,7 @@ function createAnalytics() {
       destroyed = true;
     },
 
-    getClicks() {
+    getClicks(): string | number {
       if (destroyed)
         return `Analytics is destroyed. Total clicks = ${counter}.`;
       return counter;
@@ -22,4 +22,4 @@ function createAnalytics() {
   };
 }
 
-window.analytics = createAnalytics();
+window['analytics'] = createAnalytics();

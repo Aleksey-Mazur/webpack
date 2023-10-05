@@ -2,6 +2,7 @@ import * as $ from 'jquery';
 import Post from '@models/Post';
 // import json from './assets/json';
 import WebpackLogo from '@/assets/webpack-logo';
+import './babel';
 import './styles/styles.css';
 import './styles/main.scss';
 
